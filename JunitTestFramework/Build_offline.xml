@@ -1,0 +1,92 @@
+<project name="JunitTestFramework" basedir="." default="jar" xmlns:jacoco="antlib:org.jacoco.ant">
+	<property name="src.dir" value="src" />
+	<property name="classes.dir" value="classes" />
+	<property name="project.name" value="JunitTestFramework" />
+
+	<!-- Code coverage report generation -->
+	<property name="result.dir" value="./target" />
+	<property name="result.classes.instr.dir" value="${result.dir}/classes-instr" />
+	<property name="result.report.dir" value="${result.dir}/site/jacoco" />
+	<property name="result.exec.file" value="${result.dir}/jacoco.exec" />
+	
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="./lib/jacocoant.jar" />
+	</taskdef>
+
+	<!-- Defining the compilation classpath -->
+	<path id="classpath">
+		<pathelement location="${result.classes.instr.dir}" />
+		<fileset dir="./lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Delete old coverage report -->
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+		<delete dir="${result.dir}" />
+	</target>
+
+	<!-- Create target folder -->
+	<target name="create">
+		<mkdir dir="${result.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${result.classes.instr.dir}"/>
+	</target>
+
+	<!-- Compile the project -->
+	<target name="compile" depends="clean, create">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" encoding="cp1252" includeantruntime="false">
+			<include name="**/*.java" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<!-- Offline instrumentation of compiled class files -->
+	<target name="instrument" depends="compile">
+		<jacoco:instrument destdir="${result.classes.instr.dir}">
+			<fileset dir="${classes.dir}" />
+		</jacoco:instrument>
+	</target>
+
+	<!-- Prepare execution data file -->
+		
+	<target name="test" depends="instrument">
+		<jacoco:coverage destfile="${result.exec.file}" xmlns:jacoco="antlib:org.jacoco.ant" exclclassloader="sun.reflect.DelegatingClassLoader:javassist.Loader">
+			<junit fork="true" forkmode="once" printsummary="on">
+				<classpath refid="classpath" />
+				<formatter type="xml" />
+				<batchtest todir="${result.dir}" fork="yes">
+					<fileset dir="${result.classes.instr.dir}">
+						<include name="com/main/test/*Test*" />
+					</fileset>
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+	</target>
+
+	<!-- Generate code coverage reports -->
+	<target name="report" depends="test">
+		<jacoco:report>
+			<executiondata>
+				<file file="${result.exec.file}" />
+			</executiondata>
+			<structure name="JUnit Code Coverage Report">
+				<classfiles>
+					<fileset dir="${classes.dir}" />
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${src.dir}" />
+				</sourcefiles>
+			</structure>
+			<html destdir="${result.report.dir}" />
+		</jacoco:report>
+	</target>
+
+	<!-- Create jar file -->
+	<target name="jar" depends="report">
+		<jar jarfile="${result.dir}/build/${project.name}.jar" basedir="${result.dir}">
+			
+		</jar>
+	</target>
+</project>

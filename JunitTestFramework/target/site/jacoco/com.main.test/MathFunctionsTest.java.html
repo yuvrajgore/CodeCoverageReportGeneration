@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MathFunctionsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUnit Code Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.main.test</a> &gt; <span class="el_source">MathFunctionsTest.java</span></div><h1>MathFunctionsTest.java</h1><pre class="source lang-java linenums">package com.main.test;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import com.main.java.MathFunctions;
+
+/**
+ * @author Yuvraj
+ *
+ */
+@RunWith(PowerMockRunner.class)					// @Runwith helps to invoke the specified class as a test runner instead of default runner.
+@PrepareForTest(MathFunctions.class)			// Prepare classes for Testing, which includes static , private, final
+@PowerMockIgnore(&quot;org.jacoco.agent.rt.*&quot;)
+<span class="fc" id="L24">public class MathFunctionsTest {</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	
+	
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L33">		MockitoAnnotations.initMocks(this);</span>
+<span class="fc" id="L34">	}</span>
+
+	@Test
+	public void square_Test() {
+<span class="fc" id="L38">		int expected=25; </span>
+<span class="fc" id="L39">		PowerMockito.spy(MathFunctions.class);</span>
+<span class="fc" id="L40">		Mockito.when(MathFunctions.square(Mockito.anyInt())).thenReturn(expected);</span>
+<span class="fc" id="L41">		int actual=MathFunctions.square(5);</span>
+<span class="fc" id="L42">		assertEquals(expected, actual);	</span>
+<span class="fc" id="L43">	}</span>
+	
+	@Test
+	public void multiplication_Test() throws Exception {
+<span class="fc" id="L47">		int expected=9;</span>
+<span class="fc" id="L48">		MathFunctions mathFunctions=PowerMockito.spy(new MathFunctions());</span>
+<span class="fc" id="L49">		PowerMockito.when(mathFunctions, &quot;multiplication&quot;, Mockito.anyInt(), Mockito.anyInt()).thenReturn(expected);</span>
+<span class="fc" id="L50">		int actual=mathFunctions.operations(3, 3);</span>
+<span class="fc" id="L51">		assertEquals(expected, actual);</span>
+	
+<span class="fc" id="L53">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
