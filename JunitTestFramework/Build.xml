@@ -2,7 +2,6 @@
 	<property name="src.dir" value="src" />
 	<property name="classes.dir" value="classes" />
 	<property name="project.name" value="JunitTestFramework" />
-
 	<!-- Code coverage report generation -->
 	<property name="result.dir" value="./target" />
 	<property name="result.report.dir" value="${result.dir}/site/jacoco" />
